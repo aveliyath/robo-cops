@@ -37,8 +37,7 @@ class ForwardKinematics:
         # create the joint state messages
         js = JointState()
         js.name = joint_names      
-        js.position = joint
-        _angles
+        js.position = joint_angles
 
         end_effector_pose = self.calculate_forward_kinematics(joint_angles, joint_names, robot)
         target_pose_message = self.get_pose_message_from_matrix(end_effector_pose)
