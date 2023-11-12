@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<robot name="ur3e_with_gripper" xmlns:xacro="http://www.ros.org/wiki/xacro" xmlns:xi="http://www.w3.org/2001/XInclude">
+
+    <!-- Robo Setup with UR3e Robot Arm and Robotiq 2 Finger Gripper-->
+    <!-- Author: Florian Herzog, HSLU -->
+
+    <xacro:property name="M_PI" value="3.1415926535897931" />
+
+    <!-- UR3e Robot Arm -->
+    <!-- source: https://github.com/fmauch/universal_robot/ -->
+    <xacro:include filename="$(find ur_description)/urdf/ur3e.xacro"/>
+    <xacro:arg name="kinematics_config" default="$(find ur_description)/config/ur3e/default_kinematics.yaml"/>
+    <!-- <xacro:ur3e_robot prefix="" joint_limited="true" kinematics_file="${load_yaml('$(arg kinematics_config)')}" /> -->
+
+    <!-- Robotiq 2 Finger Gripper -->
+    <!-- source: https://github.com/ros-industrial/robotiq.git -->
+
+  <xacro:arg name="gripper_size" default="140"/>
+  <xacro:property name="gripper_size_cp" value="$(arg gripper_size)"/>
+
+  <xacro:if value="${gripper_size_cp == 140}">
+    <xacro:include filename="$(find robotiq_2f_140_gripper_visualization)/urdf/robotiq_arg2f_140_model_macro.xacro" />
+    <xacro:robotiq_arg2f_140 prefix="" />
+  </xacro:if>
+
+
+  <xacro:if value="${gripper_size_cp == 85}">
+    <xacro:include filename="$(find robotiq_2f_85_gripper_visualization)/urdf/robotiq_arg2f_85_model_macro.xacro" />
+    <xacro:robotiq_arg2f_85 prefix="" />
+  </xacro:if>
+  
+   
+    <!-- Connection from robot arm to gripper -->
+  <joint name="tool_joint" type="fixed">
+	   <parent link="tool0" />
+	   <child link="robotiq_arg2f_base_link" />
+	   <origin xyz="0 0 0" rpy="0 0 ${M_PI/2}"/>
+  </joint>
+
+    <!-- Connection from world to robot arm -->
+    <link name="world" />
+    <joint name="world_joint" type="fixed">
+	  <parent link="world" />
+	  <child link="base_link" />
+    </joint>
+
+</robot>

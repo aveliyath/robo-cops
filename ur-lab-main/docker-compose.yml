@@ -1,0 +1,12 @@
+version: '2'
+services:
+  ros:
+    build: .
+    environment:
+      - DISPLAY=$DISPLAY
+      - QT_11_NO_MITSHM=1
+    network_mode: host
+    volumes:
+      - ./src/ur_lab:/root/catkin_ws/src/ur_lab
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+    command: tail -f /dev/null

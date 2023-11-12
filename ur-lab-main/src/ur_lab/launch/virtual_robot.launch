@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<launch>
+
+  <arg name="gripper_size" default="140"/>
+  
+  <param name="robot_description" command="$(find xacro)/xacro '$(find ur_lab)/urdf/ur3e_with_gripper.xacro' gripper_size:=$(arg gripper_size)"/>
+
+ 
+  <node name="kinemtics" pkg="ur_lab" type="kinematics.py" />
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" >
+    <rosparam param="source_list">["my_joint_states"]</rosparam>  
+  </node >
+
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find ur_lab)/config/ur_lab.rviz" required="true" />
+</launch>
